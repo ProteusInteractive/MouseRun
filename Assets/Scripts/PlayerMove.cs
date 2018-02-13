@@ -4,39 +4,37 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public float turnSpeed;
-    public float moveSpeed;
-    public float speedGauge;
-
-    public Rigidbody rb;
-
-    void Start ()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
-	    
+    public float turnSpeed = 5;
+    public float constantSpeed = 2f;
+    public float moveSpeed = 200;
+    public float moveBoost = 0.5f;
+    public float speedGauge = 100;
+    public float speedValue;
+   
 	void Update ()
     {
-
-        checkTurn();
-
-        if (Input.GetAxis("Vertical") != 0)
+        SpeedUpOrDown();
+        Turn();
+    }
+    
+    private void SpeedUpOrDown()
+    {
+        if (speedGauge > 0 && Input.GetAxis("Vertical") != 0) //if there's available speed gauge and the player hits up/down
         {
-            if (speedGauge >= 0)
-            {
-                speedGauge -= 1f;
-                //increase/decrease velocity by multiplying getaxis.vertical by time.deltatime
-            } 
-            
+            speedGauge -= 3f;
+            transform.position += new Vector3(Time.deltaTime * Input.GetAxis("Vertical") * moveBoost, 0f, 0f);
         }
         else
         {
-            //set velocity to the standard bullet speed
+            transform.localPosition += new Vector3(constantSpeed * Time.deltaTime, 0f, 0f);
+            if (speedGauge < 100)
+            {
+                speedGauge++;
+            }
         }
-
     }
 
-    private void checkTurn()
+    private void Turn()
     {
         if (Input.GetAxis("Horizontal") != 0)
         {
