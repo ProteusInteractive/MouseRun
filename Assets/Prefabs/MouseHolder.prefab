@@ -728,8 +728,10 @@ MonoBehaviour:
   constantSpeed: 10
   MaxSpeedGauge: 200
   fastMultiplier: 2
-  slowMultiplier: 0.3
-  gaugeCost: 5
+  slowMultiplier: 0.2
+  gaugeCost: 1
+  gaugeLabel: {fileID: 0}
+  gaugeBar: {fileID: 0}
 --- !u!124 &124420245287140252
 Behaviour:
   m_ObjectHideFlags: 1

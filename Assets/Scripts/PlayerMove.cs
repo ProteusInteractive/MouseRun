@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -12,17 +13,32 @@ public class PlayerMove : MonoBehaviour
     public float slowMultiplier;
     public float gaugeCost;
 
+    public Text gaugeLabel;
+    public Image gaugeBar;
+
     float movePerFrame;
     float movePerFrameFast;
     float movePerFrameSlow;
     float vertAxis;
     float speedGauge;
 
+    private void Start()
+    {
+        speedGauge = MaxSpeedGauge;
+    }
+
     void Update ()
     {
         CalculateSpeed();
         SpeedUpOrDown();
         Turn();
+        GaugeUI();
+    }
+
+    private void GaugeUI()
+    {
+        gaugeLabel.text = "Gauge";
+        gaugeBar.rectTransform.sizeDelta = new Vector2 (((speedGauge / MaxSpeedGauge) * 100), 15.8f);
     }
 
     private void CalculateSpeed()
