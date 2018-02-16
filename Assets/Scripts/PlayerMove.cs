@@ -1,34 +1,70 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public float turnSpeed = 8f;
-    public float constantSpeed = 50f;
-    public float moveBoost = 0.5f;
-    public float speedGauge = 100f;
-    public float speedValue;
-   
-	void Update ()
+    public float turnSpeed;
+    public float constantSpeed;
+    public float MaxSpeedGauge;
+    public float fastMultiplier;
+    public float slowMultiplier;
+    public float gaugeCost;
+
+    float movePerFrame;
+    float movePerFrameFast;
+    float movePerFrameSlow;
+    float vertAxis;
+    float speedGauge;
+
+    void Update ()
     {
+        CalculateSpeed();
         SpeedUpOrDown();
         Turn();
     }
-    
+
+    private void CalculateSpeed()
+    {
+        vertAxis = Input.GetAxis("Vertical");
+        movePerFrame = constantSpeed * Time.deltaTime;
+        movePerFrameFast = Input.GetAxis("Vertical") * movePerFrame * fastMultiplier;
+        movePerFrameSlow = Input.GetAxis("Vertical") * movePerFrame * -slowMultiplier;
+    }
+
     private void SpeedUpOrDown()
     {
-        if (speedGauge > 0 && Input.GetAxis("Vertical") != 0) //if there's available speed gauge and the player hits up/down
+        if (vertAxis == 0)
         {
-            speedGauge -= 3f;
-            transform.position += transform.right * Input.GetAxis("Vertical") * constantSpeed * Time.deltaTime * moveBoost;
+            transform.position += transform.right * movePerFrame;
+            if (speedGauge < MaxSpeedGauge)
+            {
+                speedGauge++;
+            }
         }
         else
         {
-            transform.position += transform.right * Input.GetAxis("Vertical") * constantSpeed * Time.deltaTime;
-            if (speedGauge < 100)
+            if (speedGauge > (0.2 * MaxSpeedGauge))
             {
-                speedGauge++;
+                if (vertAxis > 0)
+                {
+                    transform.position += transform.right * movePerFrameFast;
+                    speedGauge -= gaugeCost;
+                }
+                if (vertAxis < 0)
+                {
+                    transform.position += transform.right * movePerFrameSlow;
+                    speedGauge -= gaugeCost;
+                }
+            }
+            else
+            {
+                transform.position += transform.right * movePerFrame;
+                if (speedGauge < MaxSpeedGauge)
+                {
+                    speedGauge++;
+                }
             }
         }
     }
