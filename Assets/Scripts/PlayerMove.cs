@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public float turnSpeed = 5;
-    public float constantSpeed = 2f;
-    public float moveSpeed = 200;
+    public float turnSpeed = 8f;
+    public float constantSpeed = 50f;
     public float moveBoost = 0.5f;
-    public float speedGauge = 100;
+    public float speedGauge = 100f;
     public float speedValue;
    
 	void Update ()
@@ -22,11 +21,11 @@ public class PlayerMove : MonoBehaviour
         if (speedGauge > 0 && Input.GetAxis("Vertical") != 0) //if there's available speed gauge and the player hits up/down
         {
             speedGauge -= 3f;
-            transform.position += new Vector3(Time.deltaTime * Input.GetAxis("Vertical") * moveBoost, 0f, 0f);
+            transform.position += transform.right * Input.GetAxis("Vertical") * constantSpeed * Time.deltaTime * moveBoost;
         }
         else
         {
-            transform.localPosition += new Vector3(constantSpeed * Time.deltaTime, 0f, 0f);
+            transform.position += transform.right * Input.GetAxis("Vertical") * constantSpeed * Time.deltaTime;
             if (speedGauge < 100)
             {
                 speedGauge++;
