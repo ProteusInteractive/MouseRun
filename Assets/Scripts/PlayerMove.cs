@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class PlayerMove : MonoBehaviour
         SpeedUpOrDown();
         Turn();
         GaugeUI();
+		IsGameOver ();
     }
 
     private void GaugeUI()
@@ -92,4 +94,19 @@ public class PlayerMove : MonoBehaviour
             transform.Rotate(0f, Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime, 0f);
         }
     }
+
+	private void IsGameOver()
+	{
+		RaycastHit hitInfo;
+		Vector3 fwdDir = transform.right - transform.up;
+		if (Physics.Raycast(transform.position, fwdDir, out hitInfo, 5))
+		{
+			String RayTile = hitInfo.transform.gameObject.name;
+			if (RayTile == "Finish")
+			{
+				//Dummy code to show game over
+				SceneManager.LoadScene("Sandbox");
+			}
+		}
+	}
 }
